@@ -11,7 +11,7 @@ class Group(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.title
+        return self.title[:20]
 
 
 class Post(models.Model):
@@ -26,6 +26,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.text[:50]
+
+    class Meta:
+        ordering = ['-pub_date']
 
 
 class Comment(models.Model):
@@ -48,7 +51,7 @@ class Follow(models.Model):
 
     def clean(self):
         if self.user == self.following:
-            raise ValidationError("Нельзя подписаться на самого себя!")
+            raise ValidationError('Нельзя подписаться на самого себя!')
 
     def __str__(self):
         return f'{self.user} подписан на {self.following}'
